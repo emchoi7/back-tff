@@ -1,4 +1,4 @@
-const UserSchema = require('../models/User');
+const User = require('../models/User');
 const ErrorHandler = require('../middleware/error');
 
 // @desc    Login user
@@ -14,7 +14,17 @@ exports.login = async (req, res, next) => {
 // @route   POST /api/v1/auth/register
 // @access  Public
 exports.register = async (req, res, next) => {
+    console.log(req.body)
+    const { name, email, password } = req.body;
+
+    const user = User.create({
+        name,
+        email,
+        password
+    });
+
     res.status(200).json({
-        success: true
-    })
+        success: true,
+        data: user
+    }) // return a token...!
 }
