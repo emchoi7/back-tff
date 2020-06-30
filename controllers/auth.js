@@ -156,3 +156,23 @@ exports.resetPassword = AsyncHandler( async (req, res, next) => {
 
     sendTokenResponse(user, 200, res);
 });
+
+// @desc    Update info
+// @route   PUT /api/v1/auth/updateinfo
+// @access  Private
+exports.updateInfo = AsyncHandler( async (req, res, next) => {
+    const fieldsToUpdate = {
+        name: req.body.name,
+        email: req.body.email
+    }
+    
+    const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+        new: true,
+        runValidators: true
+    });
+    
+    res.status(200).json({
+        success: true,
+        data: user
+    });
+});
