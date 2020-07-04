@@ -15,6 +15,7 @@ connectDB();
 
 // Route files
 const auth = require('./routes/auth');
+const record = require('./routes/record');
 
 // Define app
 const app = express();
@@ -27,6 +28,7 @@ const PORT = process.env.PORT || 5000;
 
 // Mount routers
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/users', record);
 
 // Error Handler
 app.use(ErrorHandler);

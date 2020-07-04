@@ -176,3 +176,18 @@ exports.updateInfo = AsyncHandler( async (req, res, next) => {
         data: user
     });
 });
+
+// @desc    Logout user
+// @route   Get /api/v1/auth/logout
+// @access  Public
+exports.logout = AsyncHandler( async (req, res, next) => {
+    res.cookie('token', 'none', {
+        expire: Date.now() + 10 * 1000,
+        httpOnly: true
+    });
+
+    res.status(200).json({
+        success: true,
+        data: {}
+    })
+});
