@@ -28,7 +28,7 @@ const PORT = process.env.PORT || 5000;
 
 // Mount routers
 app.use('/api/v1/auth', auth);
-app.use('/api/v1/users', record);
+app.use('/api/v1/records', record);
 
 // Error Handler
 app.use(ErrorHandler);

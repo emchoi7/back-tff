@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config({path: './config/config.env'});
 
 const User = require('./models/User');
+const Record = require('./models/Record');
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -15,10 +16,17 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 const users = require('./data/Users.json');
+const records = require('./data/Records.json');
+
+// const updateRecordsDate = () => {
+//     // update records' dates to recent so that we can test 
+//     // but keep edge cases
+// }
 
 const importData = async () => {
     try{
         await User.create(users);
+        await Record.create(records);
 
         console.log('Data imported'.green.inverse);
         process.exit();
@@ -30,6 +38,7 @@ const importData = async () => {
 const deleteData = async () => {
     try{
         await User.deleteMany();
+        await Record.deleteMany();
 
         console.log('Data deleted'.red.inverse);
         process.exit();
