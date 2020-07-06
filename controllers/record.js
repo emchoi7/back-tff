@@ -56,7 +56,7 @@ exports.getRecord = AsyncHandler( async (req, res, next) => {
         return next(new ErrorResponse(`No record with the id ${req.params.recordid}`, 404));
     }
 
-    if(record.user != req.user.id) {
+    if(String(record.user) !== req.user.id) {
         return next(new ErrorResponse('Not authorized to access this record', 401));
     }
 
@@ -78,6 +78,59 @@ exports.createRecord = AsyncHandler( async (req, res, next) => {
     res.status(200).json({
         success: true,
         data: record
+    });
+    
+});
+
+// @desc    Update a record
+// @route   PUT /api/v1/records/:recordid
+// @access  Private
+exports.updateRecord = AsyncHandler( async (req, res, next) => {
+    let record = await Record.findById(req.params.recordid);
+
+    if(!record) {
+        return next(new ErrorResponse(`No record with the id ${req.params.recordid}`, 404));
+    }
+    console.log(record.user, req.user.id)
+    if(String(record.user) !== req.user.id) {
+        return next(new ErrorResponse('Not authorized to access this record', 401));
+    }
+
+    if(req.body.user) {
+        return next(new ErrorResponse('Cannot change the owner of records', 401));
+    }
+
+    record = await Record.findByIdAndUpdate(req.params.recordid, req.body, {
+        runValidators: true,
+        new: true
+    });
+
+    res.status(200).json({
+        success: true,
+        data: record
+    });
+    
+});
+
+// @desc    Delete a record
+// @route   DELETE /api/v1/records/:recordid
+// @access  Private
+exports.deleteRecord = AsyncHandler( async (req, res, next) => {
+    const record = await Record.findById(req.params.recordid);
+
+    if(!record) {
+        return next(new ErrorResponse(`No record with the id ${req.params.recordid}`, 404));
+    }
+
+    if(String(record.user) !== req.user.id) {
+        return next(new ErrorResponse('Not authorized to access this record', 401));
+    }
+
+    record.remove()
+
+    res.status(200).json({
+        success: true,
+        data: {}
     });
     
 });

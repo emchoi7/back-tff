@@ -3,16 +3,21 @@ const {
     getRecords,
     getRecord,
     createRecord,
-    // editRecord,
-    // deleteRecord
+    updateRecord,
+    deleteRecord
 } = require('../controllers/record');
 
 const {protect} = require('../middleware/auth');
 
 const router = express.Router();
 
-router.route('/').get(protect, getRecords).post(protect, createRecord);
-router.get('/:recordid', protect, getRecord);
+router.route('/')
+    .get(protect, getRecords)
+    .post(protect, createRecord);
+router.route('/:recordid')
+    .get(protect, getRecord)
+    .put(protect, updateRecord)
+    .delete(protect, deleteRecord);
 
 
 module.exports = router;
